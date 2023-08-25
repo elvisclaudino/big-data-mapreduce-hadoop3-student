@@ -32,12 +32,27 @@ public class WordCount {
         // criacao do job e seu nome
         Job j = new Job(c, "wordcount");
 
+        j.setJarByClass(WordCount.class);
+        j.setMapperClass(MapForWordCount.class);
+        j.setReducerClass(ReduceForWordCount.class);
+        j.setMapOutputKeyClass(Text.class);
+        j.setMapOutputValueClass(IntWritable.class);
+
+        FileInputFormat.addInputPath(j, input);
+        FileOutputFormat.setOutputPath(j, output);
+
+        j.waitForCompletion(false);
+
     }
 
     public static class MapForWordCount extends Mapper<LongWritable, Text, Text, IntWritable> {
 
         public void map(LongWritable key, Text value, Context con)
                 throws IOException, InterruptedException {
+            String linha = value.toString();
+            String palavras[] = linha.split(" ");
+            for (String p : palavras) {
+            }
         }
     }
 
@@ -45,7 +60,11 @@ public class WordCount {
 
         public void reduce(Text key, Iterable<IntWritable> values, Context con)
                 throws IOException, InterruptedException {
-
+            int soma = 0;
+            for (IntWritable v : values){
+                soma += v.get();
+            }
+            con.write(key, new IntWritable(soma));
         }
     }
 
