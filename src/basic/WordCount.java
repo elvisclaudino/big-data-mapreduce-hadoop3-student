@@ -68,4 +68,10 @@ public class WordCount {
         }
     }
 
+    public static class Conbiner extends Reducer<Text, IntWritable, Text, IntWritable>{
+        public void reduce (Text key, Iterable<IntWritable> values, Context con) throws IOException, InterruptedException {
+
+        }
+    }
+
 }
